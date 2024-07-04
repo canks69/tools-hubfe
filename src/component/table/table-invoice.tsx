@@ -1,5 +1,6 @@
-import {CloseIcon, DownloadIcon, SearchIcon} from "../icons/icons";
+import {CloseIcon, SearchIcon} from "../icons/icons";
 import {useEffect, useState} from "react";
+import {ActionDropdown} from "../button/action-dropdown.tsx";
 
 interface TableInvoiceProps {
   headers: string[];
@@ -16,6 +17,7 @@ interface RowData {
 export const TableInvoice = (props: TableInvoiceProps) => {
   const [displayData, setDisplayData] = useState<RowData[]>(props.data)
   const [search, setSearch] = useState('')
+
   const handleSearch = () => {
     if (!search) {
       setDisplayData(props.data)
@@ -29,10 +31,13 @@ export const TableInvoice = (props: TableInvoiceProps) => {
     );
     setDisplayData(filteredData)
   }
+
   const handleClearSearch = () => {
     setSearch('')
     setDisplayData(props.data)
   }
+
+
   useEffect(() => {
     displayData.length === 0 && setDisplayData(props.data)
     if (!search) return;
@@ -42,6 +47,7 @@ export const TableInvoice = (props: TableInvoiceProps) => {
   useEffect(() => {
     displayData.length === 0 && setDisplayData(props.data)
   }, [props.data])
+
   return (
     <>
       <div className="flex justify-end items-center mx-1 my-2">
@@ -91,7 +97,7 @@ export const TableInvoice = (props: TableInvoiceProps) => {
                     </tr>
                   )}
                   {displayData.map((row, index) => (
-                    <tr key={index} className="border-b dark:border-neutral-500">
+                    <tr key={index} className="border-b hover:bg-gray-300">
                       {Object.keys(row).map((key, index) => (
                         <td key={index} className="whitespace-nowrap px-6 py-4 font-medium">
                           {row[key]}
@@ -99,12 +105,7 @@ export const TableInvoice = (props: TableInvoiceProps) => {
                       ))}
                       {props.action && (
                         <td className="text-right px-4 py-2">
-                          <div className="relative">
-                            <button
-                              className={`text-white px-4 py-2 rounded-md`}>
-                              <DownloadIcon size={24} color={'#f97316'}/>
-                            </button>
-                          </div>
+                          <ActionDropdown data={row}/>
                         </td>
                       )}
                     </tr>

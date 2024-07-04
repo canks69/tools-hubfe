@@ -11,10 +11,23 @@ export const InvoiceMaker = () => {
 
   const getInvoice = async () => {
     if (!userId) return;
+    getTemplate();
     axios.get('/api/invoice/' + userId)
       .then(res => {
         if (res.status === 200) {
           setData(res.data.data);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      })
+  }
+
+  const getTemplate = async () => {
+    axios.get('/api/template')
+      .then(res => {
+        if (res.status === 200) {
+          localStorage.setItem('template', JSON.stringify(res.data.data));
         }
       })
       .catch(err => {
