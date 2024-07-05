@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import {TableInvoice} from "../../component/table/table-invoice";
 
 
@@ -35,6 +36,32 @@ export const InvoiceMaker = () => {
       })
   }
 
+  const downloadTemplate = async () => {
+    axios.get('/api/template/download', {
+      responseType: 'blob',
+      headers: {
+        'accept': 'application/json',
+      }
+    })
+      .then(res => {
+        const blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `template.xlsx`;
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err.response.data.detail,
+        })
+      })
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -48,11 +75,22 @@ export const InvoiceMaker = () => {
           localStorage.setItem('userId', res.data.uuid);
           setUserId(res.data.uuid);
           setIsModalOpen(false);
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: res.data.message,
+            timer: 1200,
+            showConfirmButton: false
+          })
           getInvoice();
         }
       })
       .catch(err => {
-        console.error(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err.response.data.detail,
+        })
       })
   }
 
@@ -85,28 +123,38 @@ export const InvoiceMaker = () => {
             encType={"multipart/form-data"}
             className="bg-white p-10 rounded-lg">
             <h1 className="text-2xl font-bold">Upload Excel</h1>
-            <input
-              name={"file"}
-              accept={".xlsx"} type="file" className="mt-5"/>
-            <div className="flex justify-center mt-10">
-              <button
-                type={"button"}
-                onClick={() => setIsModalOpen(false)}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-                Close
-              </button>
-              <button
-                type={"submit"}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md ml-3 hover:bg-blue-600">
-                Upload
-              </button>
+            <div className="flex flex-col mt-5">
+              <input
+                name={"file"}
+                accept={".xlsx"} type="file" className="mt-5"/>
+              <label className="text-gray-300 mt-2 text-sm">
+                Upload file .xlsx to generate invoice
+              </label>
             </div>
+              <div className="flex justify-center mt-10">
+                <button
+                  type={"button"}
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-red-500 w-1/2 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                  Close
+                </button>
+                <button
+                  type={"submit"}
+                  className="bg-blue-500 w-1/2 text-white px-4 py-2 rounded-md ml-3 hover:bg-blue-600">
+                  Upload
+                </button>
+              </div>
+              <div className="w-full mt-5 text-center">
+                <label className="mt-5">
+                  Klik <label onClick={downloadTemplate} className="cursor-pointer text-blue-500 hover:text-blue-300" >Disini</label> untuk mendownload template excel
+                </label>
+              </div>
           </form>
         </div>
-      )}
+        )}
 
       <div className="mt-10">
-        <div className='p-6 overflow-x-scroll px-0 pt-0 pb-2 -mx-2 sm:-mx-4 min-h-[calc(60vh)]'>
+        <div className='p-6 px-0 pt-0 pb-2 -mx-2 sm:-mx-4 min-h-[calc(60vh)]'>
           <TableInvoice headers={headers} data={data} action={"Action"}/>
         </div>
       </div>

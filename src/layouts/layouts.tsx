@@ -1,5 +1,5 @@
 import {Outlet} from "react-router-dom";
-import {Navbar} from "./navbar/navbar";
+// import {Navbar} from "./navbar/navbar";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -28,7 +28,7 @@ export const Layouts = () => {
 
   return (
     <>
-      <Navbar/>
+      {/*<Navbar/>*/}
       <Outlet/>
     </>
   );

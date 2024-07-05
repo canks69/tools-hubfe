@@ -10,14 +10,6 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <div>Home</div>
-      },
-      {
-        path: '/about',
-        element: <div>About</div>
-      },
-      {
-        path: '/invoice-maker',
         element: <InvoiceMaker />
       }
     ]

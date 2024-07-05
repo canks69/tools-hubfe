@@ -74,9 +74,9 @@ export const TableInvoice = (props: TableInvoiceProps) => {
       </div>
       <div className="rounded-lg border bg-white">
         <div className="flex flex-col">
-          <div className="overflow-y-auto">
-            <div className="inline-block min-w-full py-2 px-2">
-              <div className="overflow-hidden">
+          {/*<div className="overflow-y-auto">*/}
+            <div className="w-full py-2 px-2">
+              {/*<div className="overflow-hidden">*/}
                 <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium dark:border-neutral-500">
                   <tr>
@@ -112,9 +112,9 @@ export const TableInvoice = (props: TableInvoiceProps) => {
                   ))}
                   </tbody>
                 </table>
-              </div>
+              {/*</div>*/}
             </div>
-          </div>
+          {/*</div>*/}
         </div>
       </div>
     </>
