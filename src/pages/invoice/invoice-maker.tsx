@@ -13,19 +13,19 @@ export const InvoiceMaker = () => {
   const getInvoice = async () => {
     if (!userId) return;
     getTemplate();
-    axios.get('/api/invoice/' + userId)
+    await axios.get('/api/invoice/' + userId)
       .then(res => {
         if (res.status === 200) {
           setData(res.data.data);
         }
       })
       .catch(err => {
-        console.error(err);
+        console.log(err);
       })
   }
 
   const getTemplate = async () => {
-    axios.get('/api/template')
+    await axios.get('/api/template/')
       .then(res => {
         if (res.status === 200) {
           localStorage.setItem('template', JSON.stringify(res.data.data));
@@ -131,27 +131,29 @@ export const InvoiceMaker = () => {
                 Upload file .xlsx to generate invoice
               </label>
             </div>
-              <div className="flex justify-center mt-10">
-                <button
-                  type={"button"}
-                  onClick={() => setIsModalOpen(false)}
-                  className="bg-red-500 w-1/2 text-white px-4 py-2 rounded-md hover:bg-red-600">
-                  Close
-                </button>
-                <button
-                  type={"submit"}
-                  className="bg-blue-500 w-1/2 text-white px-4 py-2 rounded-md ml-3 hover:bg-blue-600">
-                  Upload
-                </button>
-              </div>
-              <div className="w-full mt-5 text-center">
-                <label className="mt-5">
-                  Klik <label onClick={downloadTemplate} className="cursor-pointer text-blue-500 hover:text-blue-300" >Disini</label> untuk mendownload template excel
-                </label>
-              </div>
+            <div className="flex justify-center mt-10">
+              <button
+                type={"button"}
+                onClick={() => setIsModalOpen(false)}
+                className="bg-red-500 w-1/2 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                Close
+              </button>
+              <button
+                type={"submit"}
+                className="bg-blue-500 w-1/2 text-white px-4 py-2 rounded-md ml-3 hover:bg-blue-600">
+                Upload
+              </button>
+            </div>
+            <div className="w-full mt-5 text-center">
+              <label className="mt-5">
+                Klik <label onClick={downloadTemplate}
+                            className="cursor-pointer text-blue-500 hover:text-blue-300">Disini</label> untuk
+                mendownload template excel
+              </label>
+            </div>
           </form>
         </div>
-        )}
+      )}
 
       <div className="mt-10">
         <div className='p-6 px-0 pt-0 pb-2 -mx-2 sm:-mx-4 min-h-[calc(60vh)]'>
